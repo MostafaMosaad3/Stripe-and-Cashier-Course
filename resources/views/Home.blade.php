@@ -11,7 +11,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 row">
 
             @if(request('message'))
-                <div class="alert alert-{{request('message') == 'Payment Successful' ? 'success' : 'danger'}}">
+                <div class="alert alert-{{request('message') == 'Payment Success' ? 'success' : 'danger'}}">
                     {{request('message')}}
                 </div>
             @endif

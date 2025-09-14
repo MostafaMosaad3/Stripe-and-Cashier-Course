@@ -30,11 +30,14 @@ Route::controller(CourseController::class)->group(function () {
 
 // Checkout Routes
 Route::controller(CheckoutController::class)
-    ->middleware('auth')
     ->group(function () {
-        Route::get('/checkout', 'checkout')->name('checkout');
-        Route::get('/checkout/success', 'success')->name('checkout.success');
-        Route::get('/checkout/cancel', 'cancel')->name('checkout.cancel');
+        Route::get('/checkout', 'checkout')->middleware('auth')->name('checkout');
+        Route::get('/checkout/enableCoupon', 'enableCoupon')->middleware('auth')->name('checkout.enableCoupon');
+        Route::get('/checkout/nonStripeItems', 'nonStripeItems')->middleware('auth')->name('checkout.nonStripeItems');
+        Route::get('/checkout/lineItems', 'lineItems')->middleware('auth')->name('checkout.lineItems');
+        Route::get('/checkout/guestCheckout', 'guestCheckout')->name('checkout.guest');
+        Route::get('/checkout/success', 'success')->middleware('auth')->name('checkout.success');
+        Route::get('/checkout/cancel', 'cancel')->middleware('auth')->name('checkout.cancel');
     });
 
 
