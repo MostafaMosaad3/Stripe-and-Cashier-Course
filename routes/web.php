@@ -3,8 +3,10 @@
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\PaymentIntentCheckoutController;
 use App\Http\Controllers\PaymentMethodCheckoutController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SetupIntentController;
 use App\Models\Cart;
 use App\Models\Course;
 use Illuminate\Support\Facades\Route;
@@ -44,16 +46,31 @@ Route::controller(CheckoutController::class)
 
 
 // Direct Integration - PaymentMethod Routes
-ROute::controller(PaymentMethodCheckoutController::class)
+Route::controller(PaymentMethodCheckoutController::class)
     ->group(function () {
         Route::get('/direct/paymentMethod', 'index')->middleware('auth')->name('direct.paymentMethod');
         Route::post('/direct/paymentMethod/post', 'post')->middleware('auth')->name('direct.paymentMethod.post');
+        Route::get('/direct/paymentMethod/oneClick', 'oneClick')->middleware(['auth' , 'protectOneClickCheckout'])->name('direct.paymentMethod.oneClick');
+    });
+
+// Direct Integration - PaymentIntent Routes
+Route::controller(PaymentIntentCheckoutController::class)
+    ->group(function () {
+        Route::get('/direct/paymentIntent', 'index')->middleware('auth')->name('direct.paymentIntent');
+        Route::post('/direct/paymentIntent/post', 'post')->middleware('auth')->name('direct.paymentIntent.post');
+    });
+
+// Direct Integration - SetupIntent Routes
+Route::controller(SetupIntentController::class)
+    ->group(function () {
+        Route::get('/direct/setupIntent', 'index')->middleware('auth')->name('direct.setupIntent');
+        Route::post('/direct/setupIntent/post', 'post')->middleware('auth')->name('direct.setupIntent.post');
     });
 
 
 
 // Checkout Routes
-route::controller(CartController::class)->group(function () {
+Route::controller(CartController::class)->group(function () {
     Route::get('/cart' , 'index')->name('cart.index');
     Route::get('/addToCart/{course:slug}' , 'addToCart')->name('cart.store');
     Route::get('/removeFromCart/{course:slug}' , 'removeFromCart')->name('cart.delete');
